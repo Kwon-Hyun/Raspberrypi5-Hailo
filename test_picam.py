@@ -2,6 +2,7 @@
 
 from ultralytics import YOLO
 from pyzbar.pyzbar import decode
+from picamera2 import Picamra2, Preview
 
 import cv2 as cv
 import numpy as np
@@ -68,10 +69,6 @@ def detect_qr_with_yolo(image, boxes, camera_matrix, dist_coeffs):
         cv.circle(image, frame_center, 5, (255, 255, 255), -1)
         cv.putText(image, "Camera Center", (frame_center[0] + 10, frame_center[1]),
                    cv.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 1)
-
-        # QR 중심과 camera 중심 거리 - 순수 distance pixel 하나 구할 때 (이건 아마 안 쓸 듯)
-        #distance_to_center = cv_distance(frame_center, qr_center)
-        #print(f"QRcode center <-> Camera center Distance : {distance_to_center:.2f} pixel")
         
         # QR 코드 중심과 카메라 중심 거리 계산 - (x, y) 형식 (단위 : Pixel)
         center_distance_x = qr_center[0] - frame_center[0]
@@ -96,39 +93,6 @@ def detect_qr_with_yolo(image, boxes, camera_matrix, dist_coeffs):
             distance_z = (QR_SIZE * focal_length) / qr_pixel_size
         else:
             distance_z = None
-        
-        '''
-        # QR 코드 크기에 따라 위치 조정 메시지 출력
-        # b_width, b_height 평균 내서 distance 범위 구해주기
-        qr_size_mean = (b_height + b_width) // 2
-
-        if qr_size_mean > QR_SIZE:
-            distance_message = "Less than 45cm"
-
-        elif qr_size_mean >= 60 and qr_size_mean < QR_SIZE:
-            distance_message = "45cm ~ 100cm"
-
-        elif qr_size_mean >= 40 and qr_size_mean < 60:
-            distance_message = "100cm ~ 130cm"
-        
-        elif qr_size_mean >= 20 and qr_size_mean < 40:
-            distance_message = "150cm ~ 170cm"
-            
-        else:
-            distance_message = "More than 200cm"
-        '''
-
-        '''
-        # 일단 지금은 단순하게 170보다 가/세 픽셀 값이 모두 작으면 앞으로
-        # 170보다 가/세 픽셀 값이 모두 크면 뒤로. 라고 출력되게끔만 함.
-        if b_width >= QR_SIZE and b_height >= QR_SIZE:
-            distance_message = "Go Back!"
-        elif b_width < QR_SIZE or b_height < QR_SIZE:
-            distance_message = "Come Close!"
-        else:
-            distance_message = "Nice Distance !!!!!"
-        
-        '''
 
         #! Decoding 성공 (pyzbar 사용! QRcodeDecoder 안됨).
         # QR 코드 영역 추출 (YOLO 바운딩 박스를 기준으로)
@@ -149,9 +113,11 @@ def detect_qr_with_yolo(image, boxes, camera_matrix, dist_coeffs):
         cv.putText(image, f"QR Center : {qr_center}", (qr_center[0] + 10, qr_center[1]),
                    cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 255, 255), 2)
         
+        '''
         cv.putText(image, f"Rotation (not tilt) : {rotation_angle:.2f}", (10, 50),
                    cv.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
-        
+        '''
+
         cv.putText(image, f"Distance to center (x, y) : ({center_distance_x_mm}, {center_distance_y_mm})", (10, 80), cv.FONT_HERSHEY_SIMPLEX, 0.7, (255, 0, 0), 2)
         
         
@@ -163,20 +129,24 @@ def detect_qr_with_yolo(image, boxes, camera_matrix, dist_coeffs):
         
         cv.putText(image, f"Distance (z): {distance_z:.2f}m", (qr_center[0], qr_center[1] + 30),
                    cv.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
-        '''
-        cv.putText(image, f"Status: {distance_message}", (10, 140),
-                   cv.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-        '''
+
 
     return image, qr_center, data, distance_z
 
 # 실시간 카메라 QR 코드 탐지
 def camera_qr_detection():
+    picam2 = Picamra2()
+    picam2.configure(picam2.create_preview_configuration(main={"format": "RGB888", "size": (640, 480)}))
+
+    picam2.start()
+    
+    '''
     cap = cv.VideoCapture(0)  # 내장 카메라 사용
     if not cap.isOpened():
         print("카메라를 열 수 없습니다.")
         return
-    
+    '''
+
     #! camera matrix help~
     # 임시 camera matrix & 왜곡 계수 (삼각법 활용 위해서는 실제 camera calibration 필요)
     camera_matrix = np.array([[1000, 0, 640],
@@ -184,12 +154,19 @@ def camera_qr_detection():
                               [0, 0, 1]], dtype=float)
     dist_coeffs = np.zeros((4, 1))  # 왜곡 계수 초기화
 
+    time.sleep(2)
+
     while True:
+
+        frame = picam2.capture_array()
+
+        '''
         ret, frame = cap.read()
         if not ret:
             print("프레임을 읽을 수 없습니다.")
             break
-        
+        '''
+
         # YOLOv8 모델로 객체 탐지
         results = model.predict(frame)
 
@@ -205,13 +182,14 @@ def camera_qr_detection():
         #annotated_frame = detect_qr_with_yolo(annotated_frame, boxes)
 
         # 결과 출력
-        cv.imshow('YOLOv8 QR Detection', annotated_frame)
+        cv.imshow('YOLOv8 QR Detection-picam2', annotated_frame)
 
         # 'q' 키를 누르면 종료
         if cv.waitKey(1) & 0xFF == ord('q'):
             break
 
-    cap.release()
+    #cap.release()
+    picam2.stop()
     cv.destroyAllWindows()
 
 if __name__ == "__main__":
