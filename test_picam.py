@@ -16,6 +16,12 @@ model = YOLO('model/best.pt')
 QR_SIZE = 0.06   # m
 PIXEL_TO_MM = 0.264 # 예시 (1pixel = 0.264,,)
 
+picam2 = Picamera2()
+config = picam2.create_preview_configuration(main={"format": "RGB888", "size": (640, 480)})
+picam2.configure(config)
+
+picam2.start()
+
 # 두 점 사이 거리 계산 함수
 def cv_distance(P, Q):
     return np.sqrt((P[0] - Q[0]) ** 2 + (P[1] - Q[1]) ** 2)
@@ -136,11 +142,6 @@ def detect_qr_with_yolo(image, boxes, camera_matrix, dist_coeffs):
 
 # 실시간 카메라 QR 코드 탐지
 def camera_qr_detection():
-    picam2 = Picamera2()
-    picam2.configure(picam2.create_preview_configuration(main={"format": "RGB888", "size": (640, 480)}))
-
-    picam2.start()
-    
     '''
     cap = cv.VideoCapture(0)  # 내장 카메라 사용
     if not cap.isOpened():
@@ -155,7 +156,7 @@ def camera_qr_detection():
                               [0, 0, 1]], dtype=float)
     dist_coeffs = np.zeros((4, 1))  # 왜곡 계수 초기화
 
-    time.sleep(2)
+    #time.sleep(2)
 
     while True:
 
@@ -190,8 +191,8 @@ def camera_qr_detection():
             break
 
     #cap.release()
-    picam2.stop()
     cv.destroyAllWindows()
+    picam2.stop()
 
 if __name__ == "__main__":
     camera_qr_detection()
