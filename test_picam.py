@@ -2,11 +2,12 @@
 
 from ultralytics import YOLO
 from pyzbar.pyzbar import decode
-from picamera2 import Picamra2, Preview
+from picamera2 import Picamera2, Preview
 
 import cv2 as cv
 import numpy as np
 import math
+import time
 
 # YOLOv8 모델 로드
 model = YOLO('model/best.pt')
@@ -135,7 +136,7 @@ def detect_qr_with_yolo(image, boxes, camera_matrix, dist_coeffs):
 
 # 실시간 카메라 QR 코드 탐지
 def camera_qr_detection():
-    picam2 = Picamra2()
+    picam2 = Picamera2()
     picam2.configure(picam2.create_preview_configuration(main={"format": "RGB888", "size": (640, 480)}))
 
     picam2.start()
