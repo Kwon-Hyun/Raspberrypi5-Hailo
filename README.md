@@ -3,7 +3,7 @@ Live Streaming and detect QR, centering with Raspberrypi5 &amp; Hailo Ai kit
 
 ---
 ### Installation
-####Public Pretrained Models
+<b>Public Pretrained Models</b>
 <br>
 YOLOv8n.hef for Hailo
 <br>
