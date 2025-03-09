@@ -129,7 +129,7 @@ def pid_visualize(integral, previous_error):
         client.publish(topic, json.dumps(data))
 
         # 초기에 지정한 json 파일에 데이터 저장
-        with open(json_file, "a") as f:
+        with open(json_file, "w") as f: # 계속 덮어쓰기해주는 형식
             json.dump(data, f)
             #f.write("\n")  # 각 데이터 항목을 새 줄에 저장 no갱신
 
