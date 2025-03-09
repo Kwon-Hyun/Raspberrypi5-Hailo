@@ -1,3 +1,5 @@
+# 엄밀히는 mqtt 통신 아니고 그냥 json 파일로 저장해서 갱신 후 불러오는 형식으로 진행
+
 import smbus
 import math
 import time
