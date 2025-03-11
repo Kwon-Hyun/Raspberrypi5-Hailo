@@ -8,12 +8,8 @@ import time
 import os
 from picamera2 import Picamera2
 
-# 모델 및 오디오 파일 경로 설정
-model_path = os.path.join("model/yolov8n.pt")
-mp3_path = os.path.join("audio/OHT-tts1.mp3")
-
-# YOLO 모델 로드
-model = YOLO(model_path)
+# 사용할 YOLO model 불러오기 (())
+model = YOLO("model/yolov8n.pt")
 CLASSES = yaml_load(check_yaml('coco128.yaml'))['names']
 colors = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 
@@ -27,24 +23,23 @@ picam2.configure(config)
 picam2.start()
 
 # 사람 감지 여부 확인용 변수
-last_play_time = 0  # 마지막으로 음악을 재생한 시간
+last_play_time = 0  # 마지막으로 경고 tts가 재생된 시간
 
-try:
+# AMR로부터 신호 받고 detection하기 위한 변수
+amr_signal = 0
+
+# amr_signal == 0일 땐 detection 및 sound 재생 안함
+# amr_signal == 1일 때 detection 시작
+if amr_signal == 1:
     while True:
-        # Picamera2에서 프레임 가져오기
-        try:
-            frame = picam2.capture_array()
-            
-        except Exception as e:
-            print(f"Frame Error.. : {e}")
+        frame = picam2.capture_array()
         
-        # YOLO 모델 실행
         results = model(frame, stream=True)
 
         class_ids = []
         confidences = []
         bboxes = []
-        person_detected = False  # 사람 감지 여부
+        person_detected = False  # human detection 여부
 
         for result in results:
             boxes = result.boxes
@@ -58,13 +53,13 @@ try:
 
         result_boxes = cv2.dnn.NMSBoxes(bboxes, confidences, 0.25, 0.45, 0.5)
 
-        # Bounding Box 그리기
+        # B-Box 그리기
         font = cv2.FONT_HERSHEY_PLAIN
         for i in range(len(bboxes)):
             label = str(CLASSES[int(class_ids[i][0])])
-            if label == 'person':  # 사람 감지 시
+            if label == 'person':
                 if i in result_boxes:
-                    person_detected = True  # 사람 감지됨
+                    person_detected = True  # Human Detection 성공.
                     bbox = list(map(int, bboxes[i])) 
                     x, y, x2, y2 = bbox
                     color = colors[i]
@@ -73,22 +68,23 @@ try:
                     cv2.rectangle(frame, (x, y), (x2, y2), color, 2)
                     cv2.putText(frame, label, (x, y - 10), font, 2, color, 2)
 
-        # 사람이 감지되었고, 최근 7초 이내에 음악이 재생되지 않았다면 실행
+        # 사람 감지 & 최근 7초 이내에 주의 사운드가 재생되지 않았다면 재생되도록!
         current_time = time.time()
         if person_detected and (current_time - last_play_time > 7):
-            pygame.mixer.music.load(mp3_path)  # MP3 파일 로드
-            pygame.mixer.music.play()  # 부저 sound 재생
-            last_play_time = current_time  # 마지막 재생 시간 업데이트
+            pygame.mixer.music.load("audio/OHT-tts1.mp3")
+            pygame.mixer.music.play()
+            last_play_time = current_time  # 마지막 재생 시간 update
 
         # 화면 출력
-        cv2.imshow("Human Detection", frame)
+        cv2.imshow("Human Detection and Sound", frame)
 
-        # 종료 조건
         key = cv2.waitKey(1)
         if key & 0xFF == ord('q') or key == 27:
             break
 
-finally:
-    picam2.stop()
-    cv2.destroyAllWindows()
-    pygame.mixer.quit()  # pygame 종료
+else:
+    print("AMR is Moving ..")
+    
+picam2.stop()
+cv2.destroyAllWindows()
+pygame.mixer.quit()
