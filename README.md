@@ -50,9 +50,8 @@ best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model
 
 <br>
 <b>2. Library</b>
-
-- hailo-apps-infra
 <br>
+- hailo-apps-infra
 pip install git+https://github.com/hailo-ai/hailo-apps-infra.git
 <br>
 (Download link : https://github.com/hailo-ai/hailo-apps-infra)
