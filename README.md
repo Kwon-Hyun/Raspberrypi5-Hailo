@@ -58,6 +58,7 @@ best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model
 <br>
 <br>
 <b>2. Hailo</b>
+<br>
 sudo apt update && sudo apt full-upgrade
 <br>
 sudo raspi-config ( "6 Advanced Options" > "A8 PCIe Speed": "Yes" > "Finish" )
