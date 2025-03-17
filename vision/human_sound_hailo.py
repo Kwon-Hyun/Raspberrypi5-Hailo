@@ -28,8 +28,9 @@ if not cap.isOpened():
     print("카메라를 열 수 없습니다.")
     exit()
 
+# 사람 감지 여부 확인용 변수
 # audio 재생 시간 파악을 위한 변수
-last_play_time = 0
+last_play_time = 0  # 마지막으로 경고 tts가 재생된 시간
 
 # callback 함수 정의
 def app_callback(pad, info, user_data):
