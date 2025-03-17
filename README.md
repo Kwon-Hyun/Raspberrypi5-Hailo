@@ -47,7 +47,7 @@ YOLOv8n.hef for Hailo
 - Trained Models
 <br>
 best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model )
-
+<br>
 <br>
 <b>2. Library</b>
 
