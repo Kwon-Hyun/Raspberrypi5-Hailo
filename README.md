@@ -1,8 +1,7 @@
-# Raspberrypi5-Hailo
+Raspberrypi5-Hailo
 Live Streaming and detect QR, centering with Raspberrypi5 &amp; Hailo Ai kit
 
 ---
-### Project
 project/
 ├── audio
       ├── alert-ex.mp3
@@ -32,17 +31,12 @@ project/
 └── README.md
 
 ---
-### Installation
+Installation
 
-<b>1. Model</b>
-
+1. Model
 - Public Pretrained Models
-<br>
 YOLOv8n.hef for Hailo
-<br>
 (Download link : https://github.com/hailo-ai/hailo_model_zoo/blob/db0d735604d4b1f2d5ed1bdfa527a7fd1ad192c2/docs/public_models/HAILO8/HAILO8_object_detection.rst#L629)
 
-<br>
 - Trained Models
-<br>
 best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model )
