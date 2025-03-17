@@ -9,7 +9,7 @@ import time
 import os
 from picamera2 import Picamera2
 
-# 사용할 YOLO model 불러오기 (())
+# 사용할 YOLO model 불러오기
 model = YOLO("model/yolov8n.pt")
 CLASSES = yaml_load(check_yaml('coco128.yaml'))['names']
 colors = np.random.uniform(0, 255, size=(len(CLASSES), 3))
@@ -17,13 +17,14 @@ colors = np.random.uniform(0, 255, size=(len(CLASSES), 3))
 # 오디오 설정
 pygame.mixer.init()
 
-# 카메라 초기화
+# 카메라 초기화 (hailo 안 쓸 땐 Picamera2 // 쓸 땐 Gstreamer)
 picam2 = Picamera2()
 config = picam2.create_preview_configuration(main={"size": (1280, 720), "format": "RGB888"})
 picam2.configure(config)
 picam2.start()
 
 # 사람 감지 여부 확인용 변수
+# audio 재생 시간 파악을 위한 변수
 last_play_time = 0  # 마지막으로 경고 tts가 재생된 시간
 
 try:
@@ -39,7 +40,7 @@ try:
         class_ids = []
         confidences = []
         bboxes = []
-        person_detected = False  # human detection 여부
+        person_detected = False  # human detection 여부 (감지 시, True)
 
         for result in results:
             boxes = result.boxes
@@ -53,7 +54,7 @@ try:
 
         result_boxes = cv2.dnn.NMSBoxes(bboxes, confidences, 0.25, 0.45, 0.5)
 
-        # B-ㄴBox 그리기
+        # B-Box 그리기
         font = cv2.FONT_HERSHEY_PLAIN
         for i in range(len(bboxes)):
             label = str(CLASSES[int(class_ids[i][0])])
