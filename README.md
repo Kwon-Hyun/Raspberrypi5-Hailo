@@ -26,6 +26,7 @@ project/<br>
 &emsp;      ├── test_picam.py<br>
 ├── vision<br>
 &emsp;      ├── human_detection.py<br>
+&emsp;      ├── human_sound_hailo.py<br>
 &emsp;      ├── human_sound.py<br>
 └── .gitignore<br>
 └── main.py<br>
@@ -46,3 +47,12 @@ YOLOv8n.hef for Hailo
 - Trained Models
 <br>
 best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model )
+
+<br>
+<b>2. Library</b>
+
+- hailo-apps-infra
+<br>
+pip install git+https://github.com/hailo-ai/hailo-apps-infra.git
+<br>
+(Download link : https://github.com/hailo-ai/hailo-apps-infra)
