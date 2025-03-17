@@ -1,7 +1,6 @@
 Raspberrypi5-Hailo
 Live Streaming and detect QR, centering with Raspberrypi5 &amp; Hailo Ai kit
 
----
 project/
 ├── audio
       ├── alert-ex.mp3
@@ -30,7 +29,7 @@ project/
 └── main.py
 └── README.md
 
----
+
 Installation
 
 1. Model
