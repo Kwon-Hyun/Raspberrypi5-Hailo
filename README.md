@@ -57,7 +57,21 @@ best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model
 &emsp; Augmentations : Outputs per training example:3, Brightness:Between -10% ~ +10%, Exposure:Between -10% ~ +10%
 <br>
 <br>
-<b>2. Library</b> 
+<b>2. Hailo</b>
+sudo apt update && sudo apt full-upgrade
+<br>
+sudo raspi-config ( "6 Advanced Options" > "A8 PCIe Speed": "Yes" > "Finish" )
+<br>
+sudo reboot
+<br>
+sudo apt install hailo-all
+<br>
+sudo reboot
+<br>
+hailortcli fw-control identify
+<br>
+<br>
+<b>3. Library</b>
 
 - hailo-apps-infra
 <br>
