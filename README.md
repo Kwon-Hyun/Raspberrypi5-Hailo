@@ -46,10 +46,18 @@ YOLOv8n.hef for Hailo
 <br>
 - Trained Models
 <br>
-best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model )
+best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model by roboflow )
+<br><br>
+:: dataset 정보 ::
+<br>
+&emsp; Dataset Split : train 989장, valid 82장, test 0장
+<br>
+&emsp; 전처리 : auto-oriented:Applied, Resize:Stretch to 2048x2048
+<br>
+&emsp; Augmentations : Outputs per training example:3, Brightness:Between -10% ~ +10%, Exposure:Between -10% ~ +10%
 <br>
 <br>
-<b>2. Library</b>
+<b>2. Library</b> 
 
 - hailo-apps-infra
 <br>
