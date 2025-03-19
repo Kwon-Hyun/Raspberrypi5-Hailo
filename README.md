@@ -80,35 +80,40 @@ project/
 ### Installation
 
 **1. Model**
+
 [Download link](https://github.com/hailo-ai/hailo_model_zoo/blob/db0d735604d4b1f2d5ed1bdfa527a7fd1ad192c2/docs/public_models/HAILO8/HAILO8_object_detection.rst#L629)
 
 
 - Public Pretrained Models
 
 
-YOLOv8n.hef for Hailo
+    YOLOv8n.hef for Hailo
 
 
 - Trained Models
 
 
-best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model by roboflow )
+    best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model by roboflow )
 
 
 ---
 
 
-:: dataset 정보 ::
+>**:: dataset 정보 ::**
+>
+>
+>Dataset Split : train 989장, valid 82장, test 0장
+>
+>
+>전처리 : auto-oriented:Applied, Resize:Stretch to 2048x2048
+>
+>
+>Augmentations : Outputs per training example:3, Brightness:Between -10% ~ +10%, Exposure:Between -10% ~ +10%
+>
+>
 
 
-Dataset Split : train 989장, valid 82장, test 0장
-
-
-전처리 : auto-oriented:Applied, Resize:Stretch to 2048x2048
-
-
-Augmentations : Outputs per training example:3, Brightness:Between -10% ~ +10%, Exposure:Between -10% ~ +10%
-
+---
 
 
 **2. Hailo**
