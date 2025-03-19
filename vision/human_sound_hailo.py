@@ -81,4 +81,8 @@ if __name__ == "__main__":
     # GStreamerDetectionApp 인스턴스 생성
     user_data = object()  # 사용자 정의 데이터 (콜백에 전달)
     app = GStreamerDetectionApp(app_callback, user_data)
+<<<<<<< HEAD
     app.run()
+=======
+    app.run()
+>>>>>>> 2da5b1cf3c5689d401b6ef65a869c47c8328a5d9

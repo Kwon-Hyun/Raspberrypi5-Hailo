@@ -83,3 +83,44 @@ pip install git+https://github.com/hailo-ai/hailo-apps-infra.git
 - Picamera2
 <br>
 pip install picamera2
+
+<br>
+- Trained Models
+<br>
+best.pt ( for QR barcode ; 약 1072장의 이미지들로 학습 진행한 model by roboflow )
+<br><br>
+:: dataset 정보 ::
+<br>
+&emsp; Dataset Split : train 989장, valid 82장, test 0장
+<br>
+&emsp; 전처리 : auto-oriented:Applied, Resize:Stretch to 2048x2048
+<br>
+&emsp; Augmentations : Outputs per training example:3, Brightness:Between -10% ~ +10%, Exposure:Between -10% ~ +10%
+<br>
+<br>
+<b>2. Hailo</b>
+sudo apt update && sudo apt full-upgrade
+<br>
+sudo raspi-config ( "6 Advanced Options" > "A8 PCIe Speed": "Yes" > "Finish" )
+<br>
+sudo reboot
+<br>
+sudo apt install hailo-all
+<br>
+sudo reboot
+<br>
+hailortcli fw-control identify
+<br>
+<br>
+<b>3. Library</b>
+
+- hailo-apps-infra
+<br>
+pip install git+https://github.com/hailo-ai/hailo-apps-infra.git
+<br>
+(Download link : https://github.com/hailo-ai/hailo-apps-infra)
+<br>
+
+- Picamera2
+<br>
+pip install picamera2
