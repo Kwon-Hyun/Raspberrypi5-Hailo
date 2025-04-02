@@ -83,5 +83,3 @@ if __name__ == "__main__":
     app = GStreamerDetectionApp(app_callback, user_data)
 
     app.run()
-
-    app.run()
